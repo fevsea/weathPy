@@ -27,8 +27,7 @@ def readDB():
     conn.close()
     return d
 
-
-if __name__ == "__main__":
+def render():
     initDB()
     data = readDB()
     x = []
@@ -38,4 +37,7 @@ if __name__ == "__main__":
         y.append(entry[0])
 
     plt.plot(x,y)
-    plt.show()
+    plt.savefig('foo.png')
+
+if __name__ == "__main__":
+    render()

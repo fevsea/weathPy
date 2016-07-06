@@ -8,10 +8,19 @@ class testHTTPServer_RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         # Send response status code
         self.send_response(200)
+        print(self.path)
+
+        if self.path == "/foo.png":
+           self.send_header("Content-type", "image/png")
+           self.end_headers()
+           self.wfile.write(load_binary('foo.png'))
+           return
+
 
         # Send headers
         self.send_header('Content-type', 'text/html')
         self.end_headers()
+        makeGraph.render()
 
         html = """<!DOCTYPE html><html><head>
 <style>
@@ -24,7 +33,7 @@ th, td {
 }
 </style>
 <title>Temperaturas</title>
-</head><body><table style="width:100%">"""
+</head><body><img src="foo.png" alt="Full history"><table style="width:100%">"""
 
 
         makeGraph.initDB()
@@ -51,6 +60,11 @@ def run():
     httpd = HTTPServer(server_address, testHTTPServer_RequestHandler)
     print('running server...')
     httpd.serve_forever()
+
+
+def load_binary(file):
+    with open(file, 'rb') as file:
+        return file.read()
 
 
 run()
